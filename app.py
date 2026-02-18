@@ -1,5 +1,5 @@
 import json
-from datetime import date, timedelta    
+from datetime import date, timedelta,datetime
 
 DATA_FILE = "habits.json"
 FIRE = "🔥"
@@ -95,14 +95,22 @@ def check_in(data):
     habits = list(data["habits"].keys())
 
     while True:
-        print("\nWhich habits did you complete today?")
+        print("\nWhich habit did you complete today?")
         print("\n0) Return to main menu")
+
         for i, name in enumerate(habits, 1):
-            preview = "".join(data["habits"][name]["history"][-7:])
-            print(f"{i}) {name.title():15} {preview}")
+            habit = data["habits"][name]
+            preview = "".join(habit["history"][-7:])
+            created = datetime.fromisoformat(habit["creation_date"]).strftime("%d %b")
+
+            last_check = datetime.fromisoformat(habit["last_check_in_date"]).strftime("%d %b")
+            if last_check is None:
+                last_check = "---"
+
+            print(f"{i}) {name.title():15} Created: {created} | Last: {last_check} | {preview:7}")
 
         try:
-            choice = int(input("\n select a habit or 0 to exit"))
+            choice = int(input("\n select a habit or 0 to exit: \n"))
             
             # if user wants to exit
             if choice == 0:
@@ -165,24 +173,27 @@ def break_streak(habit):
 # ----------------------------
 
 def show_status(data):
+    """Show habit streaks and last 7 days."""
     if not data["habits"]:
         print("no habits available ")
         return
-    """Show habit streaks and last 7 days."""
+    
     print("\nYour habits status:\n")
 
     for name, habit in data["habits"].items():
         last_7 = "".join(habit["history"][-7:])
+        created = datetime.fromisoformat(habit["creation_date"]).strftime("%d %b")
+        
+        if habit["last_check_in_date"] is None:
+            last_check = "—"
+        else:
+            last_check = datetime.fromisoformat(
+                habit["last_check_in_date"]
+            ).strftime("%d %b")
+
         streak = habit["streak"]
 
-        if streak >= 7:
-            status = "🔥🔥🔥"
-        elif streak > 0:
-            status = "🔥"
-        else:
-            status = "🧊"
-
-        print(f"{name.title():15} {last_7:10}  Streak: {streak} {status}")
+        print(f"{name.title():10} Created: {created} | Last: {last_check} | Streak: {streak} | {last_7:10} ")
 
 
 # ----------------------------
