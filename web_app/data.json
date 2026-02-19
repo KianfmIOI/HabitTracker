@@ -1,0 +1,48 @@
+{
+  "user": "kian",
+  "habits": {
+    "reading": {
+      "creation_date": "2026-02-18",
+      "last_check_in_date": "2026-02-19",
+      "history": [
+        "🔥",
+        "🔥"
+      ],
+      "streak": 2,
+      "is_main": false
+    },
+    "workout": {
+      "creation_date": "2026-02-12",
+      "last_check_in_date": "2026-02-19",
+      "history": [
+        "🔥",
+        "🧊",
+        "🧊",
+        "🧊",
+        "🧊",
+        "🔥",
+        "🔥"
+      ],
+      "streak": 2,
+      "is_main": false
+    },
+    "coding": {
+      "creation_date": "2026-02-01",
+      "last_check_in_date": "2026-02-19",
+      "history": [
+        "🔥",
+        "🔥",
+        "🔥",
+        "🔥",
+        "🔥",
+        "🔥",
+        "🔥",
+        "🔥",
+        "🔥"
+      ],
+      "streak": 9,
+      "is_main": false
+    }
+  },
+  "last_check_in_date": "2026-02-19"
+}

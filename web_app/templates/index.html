@@ -1,0 +1,81 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Habit Tracker</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <main class="container">
+    <h1>Habit Tracker</h1>
+
+    {% if message %}<p class="msg ok">{{ message }}</p>{% endif %}
+    {% if error %}<p class="msg err">{{ error }}</p>{% endif %}
+
+    {% if user %}
+    <section>
+      <h2>Welcome Back</h2>
+      <p>Hello, {{ user }}.</p>
+    </section>
+    {% endif %}
+
+    {% if not user %}
+    <section>
+      <h2>User</h2>
+      <form method="post" action="{{ url_for('set_user_route') }}">
+        <input type="text" name="name" value="{{ user or '' }}" placeholder="Your name" required>
+        <button type="submit">Save</button>
+      </form>
+    </section>
+    {% endif %}
+
+    <section>
+      <h2>Add Habit</h2>
+      <form method="post" action="{{ url_for('add_habit_route') }}">
+        <input type="text" name="habit_name" placeholder="Habit name" required>
+        <button type="submit">Add</button>
+      </form>
+    </section>
+
+    <section>
+      <h2>Habits</h2>
+      {% if habits %}
+      <table>
+        <thead>
+          <tr>
+            <th>Habit</th>
+            <th>Created</th>
+            <th>Last</th>
+            <th>Streak</th>
+            <th>Last 7</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for habit in habits %}
+          <tr>
+            <td>{{ habit.name_title }}</td>
+            <td>{{ habit.created }}</td>
+            <td>{{ habit.last_check }}</td>
+            <td>{{ habit.streak }}</td>
+            <td>{{ habit.history }}</td>
+            <td>
+              <form method="post" action="{{ url_for('check_in_route', habit_name=habit.name) }}" class="inline">
+                <button type="submit">Check In</button>
+              </form>
+              <form method="post" action="{{ url_for('delete_route', habit_name=habit.name) }}" class="inline">
+                <button type="submit" class="danger">Delete</button>
+              </form>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <p>No habits yet.</p>
+      {% endif %}
+    </section>
+  </main>
+</body>
+</html>
