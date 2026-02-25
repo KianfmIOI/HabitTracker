@@ -10,7 +10,7 @@
         "🔥"
       ],
       "streak": 3,
-      "is_main": true
+      "is_main": false
     },
     "workout": {
       "creation_date": "2026-02-12",
@@ -30,7 +30,7 @@
     },
     "coding": {
       "creation_date": "2026-02-01",
-      "last_check_in_date": "2026-02-20",
+      "last_check_in_date": "2026-02-22",
       "history": [
         "🔥",
         "🔥",
@@ -41,10 +41,12 @@
         "🔥",
         "🔥",
         "🔥",
+        "🔥",
+        "🧊",
         "🔥"
       ],
-      "streak": 10,
-      "is_main": false
+      "streak": 1,
+      "is_main": true
     },
     "running": {
       "creation_date": "2026-02-20",
@@ -56,5 +58,5 @@
       "is_main": false
     }
   },
-  "last_check_in_date": "2026-02-20"
+  "last_check_in_date": "2026-02-22"
 }
