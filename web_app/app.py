@@ -1,7 +1,10 @@
 ﻿from flask import Flask, redirect, render_template, request, url_for
+from flask_sqlalchemy import SQLAlchemy 
 import habits
 
 app = Flask(__name__)
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///data.db"
+db = SQLAlchemy(app)
 
 @app.get("/")
 def index():
