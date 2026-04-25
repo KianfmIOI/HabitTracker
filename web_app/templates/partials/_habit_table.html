@@ -1,0 +1,23 @@
+<section>
+  <h2>Habits</h2>
+  {% if habits %}
+
+  <!-- Desktop Table Header (hidden on mobile) -->
+  <div class="habits-header">
+    <div class="habit-cell habit-star">Main</div>
+    <div class="habit-cell habit-info">Habit</div>
+    <div class="habit-cell habit-last">Last</div>
+    <div class="habit-cell habit-streak">Streak</div>
+    <div class="habit-cell habit-checkin">Check-in</div>
+    <div class="habit-cell habit-actions">Actions</div>
+  </div>
+
+  <div class="habits-container" id="habit-list">
+
+    {% include "partials/_habit_list.html" %}
+  </div>
+
+  {% else %}
+  <p>You do not have any habits yet, try adding one.</p>
+  {% endif %}
+</section>

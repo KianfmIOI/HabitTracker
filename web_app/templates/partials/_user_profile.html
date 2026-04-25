@@ -1,0 +1,68 @@
+{% if user %}
+<aside class="user-sidebar hidden" id="user-sidebar">
+
+  <!-- Avatar + Name -->
+  <div class="user-avatar-wrap">
+    <div class="user-avatar">
+      {{ user.name[0]|upper if user.name else user.username[0]|upper }}
+    </div>
+    <div>
+      <div class="user-display-name">{{ user.name or user.username }}</div>
+      <div class="user-username">@{{ user.username }}</div>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="user-stats">
+    <div class="user-stat">
+      <strong>{{ habits|length + archived_habits|length }}</strong>
+      <span>Habits</span>
+    </div>
+    <div class="user-stat-divider"></div>
+    <div class="user-stat">
+      {% set ns = namespace(max_streak=0) %}
+      {% for habit in habits %}
+      {% if habit.longest_streak > ns.max_streak %}
+      {% set ns.max_streak = habit.longest_streak %}
+      {% endif %}
+      {% endfor %}
+      {% for habit in archived_habits %}
+      {% if habit.longest_streak > ns.max_streak %}
+      {% set ns.max_streak = habit.longest_streak %}
+      {% endif %}
+      {% endfor %}
+      <strong>{{ ns.max_streak }} 🔥</strong>
+      <span>Best Streak</span>
+    </div>
+  </div>
+
+  <!-- Info -->
+  <div class="user-info">
+    <div class="user-info-row">
+      <span>📞</span>
+      <span>{{ user.phone_number }}</span>
+    </div>
+    {% if user.email %}
+    <div class="user-info-row">
+      <span>✉️</span>
+      <span>{{ user.email }}</span>
+    </div>
+    {% endif %}
+    <div class="user-info-row">
+      <span>🎂</span>
+      <span>{{ user.birth_date or 'Not set' }}</span>
+    </div>
+    <div class="user-info-row">
+      <span>📅</span>
+      <span>{{ user.creation_date.strftime("%b %Y") if user.creation_date else '' }}</span>
+    </div>
+  </div>
+
+  <!-- Logout -->
+  <form method="post" action="{{ url_for('logout') }}" class="confirmation-required"
+    data-confirm-title="Where are you going?" data-confirm-message="Are you sure you want to log out?">
+    <button type="submit" class="user-logout-btn">Logout</button>
+  </form>
+
+</aside>
+{% endif %}

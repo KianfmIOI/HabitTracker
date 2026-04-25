@@ -1,0 +1,40 @@
+<div id="editModal" class="modal">
+  <div class="modal-content">
+    <h3>Edit Habit</h3>
+    <form id="editForm" method="POST">
+      <label class="form-label">Name:</label>
+      <input
+        class="form-control"
+        type="text"
+        name="name"
+        id="editName"
+        required
+      />
+
+      <label class="form-label">Interval (days):</label>
+      <input
+        class="form-control"
+        type="number"
+        name="interval"
+        id="editInterval"
+        min="1"
+        required
+      />
+
+      <label class="form-label">Emoji:</label>
+      <input
+        class="form-control"
+        type="text"
+        name="emoji"
+        id="editEmoji"
+        maxlength="10"
+      />
+
+      <label class="form-label">Color:</label>
+      <input class="form-control" type="color" name="color" id="editColor" />
+
+      <button type="submit">Save Changes</button>
+      <button type="button" onclick="closeModal()">Cancel</button>
+    </form>
+  </div>
+</div>

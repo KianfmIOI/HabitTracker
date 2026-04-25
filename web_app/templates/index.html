@@ -1,87 +1,31 @@
-﻿<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Habit Tracker</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
-  <main class="container">
-    <h1>Habit Tracker</h1>
+{% extends "base.html" %} {% block nav %} {% include "partials/_nav_box.html" %}
+{% endblock %} {% block content %}
+{% if message %}
+<div class="msg ok alert alert-success" role="alert">{{message}}</div>
+{% endif %} {% if error %}
+<div class="msg err alert alert-danger" role="alert">{{ error }}</div>
+{% endif %}
+<!--wrapper-->
+<div class="layout-wrapper row g-3">
+  <!--left sidebar-->
+  <div class="left-sidebar col-md-3">
+    <!--archives-->
+    {% include "partials/_archives.html" %}
 
-    {% if message %}<p class="msg ok">{{ message }}</p>{% endif %}
-    {% if error %}<p class="msg err">{{ error }}</p>{% endif %}
+    <!--details-->
+    {% include "partials/_details.html" %}
+  </div>
 
-    {% if user %}
-    <section>
-      <h2>Welcome Back</h2>
-      <p>Hello, {{ user }}.</p>
-    </section>
-    {% endif %}
+  <!--main content-->
+  <div class="main-content col-md-6">
+    <!--Add habit form-->
+    {% include "partials/_add_habit.html" %}
 
-    {% if not user %}
-    <section>
-      <h2>User</h2>
-      <form method="post" action="{{ url_for('set_user_route') }}">
-        <input type="text" name="name" value="{{ user or '' }}" placeholder="Your name" required>
-        <button type="submit">Save</button>
-      </form>
-    </section>
-    {% endif %}
-
-    <section>
-      <h2>Add Habit</h2>
-      <form method="post" action="{{ url_for('add_habit_route') }}">
-        <input type="text" name="habit_name" placeholder="Habit name" required>
-        <button type="submit">Add</button>
-      </form>
-    </section>
-
-    <section>
-      <h2>Habits</h2>
-      {% if habits %}
-      <table>
-        <thead>
-          <tr>
-            <th></th>
-            <th>Habit</th>
-            <th>Created</th>
-            <th>Last</th>
-            <th>Streak</th>
-            <th>Last 7</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for habit in habits %}
-          <tr>
-            <td>
-              <form method="post" action="{{ url_for('toggle_main_route', habit_name=habit.name) }}" class="inline">
-                <button type="submit" aria-label="Toggle main habit">{{ "★" if habit.is_main else "☆" }}</button>
-              </form>
-            </td>
-            <td>{{ habit.name_title }}</td>
-            <td>{{ habit.created }}</td>
-            <td>{{ habit.last_check }}</td>
-            <td>{{ habit.streak }}</td>
-            <td>{{ habit.history }}</td>
-            <td>
-              <form method="post" action="{{ url_for('check_in_route', habit_name=habit.name) }}" class="inline">
-                <button type="submit">Check In</button>
-              </form>
-              <form method="post" action="{{ url_for('delete_route', habit_name=habit.name) }}" class="inline">
-                <button type="submit" class="danger">Delete</button>
-              </form>
-            </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-      {% else %}
-      <p>No habits yet.</p>
-      {% endif %}
-    </section>
-  </main>
-</body>
-</html>
+    <!--Habit table-->
+    {% include "partials/_habit_table.html" %}
+  </div>
+  <!--User profile-->
+  {% include "partials/_user_profile.html" %}
+</div>
+<!--Habit's edit modal-->
+{% include "partials/_edit_modal.html" %} {% endblock %}

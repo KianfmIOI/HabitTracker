@@ -1,0 +1,93 @@
+{# templates/partials/_habit_details_card.html #}
+<article class="habit-details-card" style="background-color: {{ habit.color or '#85B2FA' }};">
+  <header class="habit-details-header">
+    <div class="habit-main-info">
+      <button class="details-close-btn" type="button">&times;</button>
+      <span class="habit-emoji">{{ habit.emoji or "🔥" }}</span>
+      <div>
+        <h3 class="habit-name">{{ habit.name }}</h3>
+        <div class="habit-meta">
+          <span>
+            Created: {{ habit.creation_date.strftime('%b %d, %Y') if
+            habit.creation_date else "—" }}
+          </span>
+          <span>•</span>
+          <span>
+            Interval: every {{ habit.interval or 1 }} day{% if (habit.interval
+            or 1) > 1 %}s{% endif %}
+          </span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  {% if habit.description %}
+  <section class="habit-description">
+    <p><strong>Description:</strong> {{ habit.description }}</p>
+  </section>
+  {% endif %}
+
+  <section class="habit-stats">
+    <h4>Stats</h4>
+    <ul>
+      <li>{% set score = habit|habit_completion %}
+        {% if score %}
+        Consistency: <strong>{{ score }}</strong>
+        {% endif %}
+      </li>
+      <li>Current streak: <strong>{{ habit.streak }}</strong></li>
+      <li>Longest streak: <strong>{{ habit.longest_streak }}</strong></li>
+      {% if habit.last_check_in_date %}
+      <li>
+        Last check-in:
+        <br />
+        <strong> {{ habit.last_check_in_date | details_date }} </strong>
+      </li>
+      {% endif %} {% if habit.is_main %}
+      <li>Main habit</li>
+      {% endif %} {% if habit.is_archived %}
+      <li>
+        <strong>Archived</strong>
+      </li>
+      {% endif %}
+    </ul>
+  </section>
+  <section class="habit-history">
+    <h4>Last 90 Days</h4>
+    <div class="checkin-calendar">
+      {% for day in calendar_days %}
+      <div class="cal-cell {{ day.status }}" title="{{ day.date.strftime('%b %d') }}">
+        {% if day.status == "done" %}
+        <span class="cal-emoji">{{ day.emoji}}</span>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+  <section class="habit-history">
+    <h4>Full Check-in History</h4>
+    {% if check_ins %}
+    <ul class="checkin-history-list">
+      {% for ci in check_ins|reverse %} {% set dateStr = ci.check_in_date.strftime('%b
+      %d, %Y') %} {% set status = "Done" if ci.is_done else "Missed" %} {% set
+      emojiStyle = "" if ci.is_done else "opacity: 0.4; filter:
+      grayscale(100%);" %}
+      <li class="checkin-history-item">
+        <span class="checkin-emoji" style="{{ emojiStyle }}">
+          {{ habit.emoji or "🔥" }}
+        </span>
+        <span class="checkin-info">
+          <strong>{{ dateStr }}</strong>
+          <span class="checkin-status">({{ status }})</span>
+          {% if ci.note and ci.note.strip() %}
+          <div class="checkin-note">Note: {{ ci.note }}</div>
+          {% endif %}
+        </span>
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <p>No check-ins yet.</p>
+    {% endif %}
+  </section>
+</article>

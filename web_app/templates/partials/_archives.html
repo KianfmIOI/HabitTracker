@@ -1,0 +1,28 @@
+<aside class="archives-sidebar hidden" id="archives-sidebar">
+  <div class="archives-header">
+    <h2>Archived Habits</h2>
+  </div>
+
+  {% if archived_habits %}
+  <div class="archives-container">
+    {% for habit in archived_habits %}
+    <div class="archive-item" style="--habit-color: {{ habit.color }};">
+      <div class="archive-main">
+        <span class="archive-name">{{ habit.name }}</span>
+        <div class="archive-actions">
+          <button data-habit-id="{{ habit.id }}" class="habit-archive-btn icon-btn" type="button" title="Unarchive">
+            📬
+          </button>
+          <form method="post" data-confirm-message="Are you sure you want to delete '{{ habit.name }}'?"
+            action="{{ url_for('delete_habit_route', habit_id=habit.id) }}" class="confirmation-required inline">
+            <button type="submit" class="danger" title="Delete">🗑️</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p class="empty-state">No archives found.</p>
+  {% endif %}
+</aside>
