@@ -370,13 +370,14 @@ def toggle_main_route(habit_id):
             flash(f"{habit.name} is no longer your main habit", "ok")
         
         db.session.commit()
-        habits = Habit.query.filter_by(user_id=habit.user_id).order_by(Habit.is_main.desc()).all()
-        msg = f"{habit.name} is now your main habit" if habit.is_main else f"{habit.name} is no longer your main habit"
+        # habits = Habit.query.filter_by(user_id=habit.user_id).order_by(Habit.is_main.desc()).all()
+        # msg = f"{habit.name} is now your main habit" if habit.is_main else f"{habit.name} is no longer your main habit"
         
-        habit_list_html = render_template("partials/_habit_list.html", habits=habits)
-        flash_html = render_template("partials/_flash_message.html", msg = msg, category="ok")
+        # habit_list_html = render_template("partials/_habit_list.html", habits=habits)
+        # flash_html = render_template("partials/_flash_message.html", msg = msg, category="ok")
 
-        return make_response(habit_list_html + flash_html)
+        # return make_response(habit_list_html + flash_html)
+        return redirect(url_for('index'))
 
 
         
