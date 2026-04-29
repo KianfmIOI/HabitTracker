@@ -1,27 +1,14 @@
-<div
-  class="habit-item"
-  data-habit-id="{{ habit.id }}"
-  style="--habit-color: {{habit.color}};"
->
+<div class="habit-item" data-habit-id="{{ habit.id }}" style="--habit-color: {{habit.color}};">
   <!-- Main Habit Row -->
   <div class="habit-main-row">
     <!-- Star/Main Toggle -->
     <div class="habit-cell habit-star">
-      <button
-        hx-post="{{url_for('toggle_main_route', habit_id=habit.id)}}"
-        hx-target="#habit-list"
-        hx-swap="innerHTML transition:true"
-        class="toggle-main-btn hidden"
-        type="button"
-        aria-label="Toggle main habit"
-      >
+      <button hx-post="{{url_for('toggle_main_route', habit_id=habit.id)}}" hx-target="#habit-list"
+        hx-swap="innerHTML transition:true" class="toggle-main-btn hidden" type="button" aria-label="Toggle main habit">
         HTMX {{ "★" if habit.is_main else "☆" }}
       </button>
       <br />
-      <form
-        action="{{url_for('toggle_main_route', habit_id=habit.id)}}"
-        method="post"
-      >
+      <form action="{{url_for('toggle_main_route', habit_id=habit.id)}}" method="post">
         <button class="toggle-main-btn" type="submit">
           {{ "★" if habit.is_main else "☆" }}
         </button>
@@ -33,14 +20,11 @@
       <div class="habit-name-wrapper">
         <span class="habit-emoji">{{ habit.emoji }}</span>
         <div class="habit-text">
-          <span
-            class="habit-name"
-            title="Created on: {{habit.creation_date.strftime('%B %d, %Y')}}"
-          >
+          <span class="habit-name" title="Created on: {{habit.creation_date.strftime('%B %d, %Y')}}">
             {{ habit.name }}
           </span>
-          <span
-            >Category: {% if habit.category %}{{ habit.category.title }}{% else
+          <span style="font-size: 1rem;font-weight: 400;">Category: {% if habit.category %}{{ habit.category.title
+            }}{% else
             %}Not Assigned{% endif %}
           </span>
           {% if habit.interval and habit.interval > 1 %}
@@ -51,13 +35,7 @@
         </div>
       </div>
     </div>
-    <div class="habit-cell habit-category">
-      <span class="cell-label">Category:</span>
-      <span class="cell-value">
-        {% if habit.category %} {{ habit.category.title }} {% else %} Not
-        Assigned {% endif %}
-      </span>
-    </div>
+
     <!-- Last Check-in -->
     <div class="habit-cell habit-last">
       <span class="cell-label">Last:</span>
@@ -77,20 +55,13 @@
     <!-- Check-in Buttons -->
     <div class="habit-cell habit-checkin">
       <div class="checkin-pill">
-        <form
-          action="{{ url_for('check_in_route', habit_id=habit.id) }}"
-          method="post"
-        >
+        <form action="{{ url_for('check_in_route', habit_id=habit.id) }}" method="post">
           <button class="check-in-btn btn btn-primary" type="submit">
             Check In
           </button>
         </form>
-        <button
-          class="check-in-note-btn"
-          type="button"
-          onclick="ToggleCheckInNoteRow({{ habit.id }})"
-          title="Habit Note"
-        >
+        <button class="check-in-note-btn" type="button" onclick="ToggleCheckInNoteRow({{ habit.id }})"
+          title="Habit Note">
           📝
         </button>
       </div>
@@ -107,47 +78,22 @@
   <!-- Actions Row -->
   <div class="habit-actions-row">
     <div class="habit-actions-inner">
-      <button
-        data-habit-id="{{ habit.id }}"
-        class="habit-archive-btn icon-btn"
-        type="button"
-        title="Archive"
-      >
+      <button data-habit-id="{{ habit.id }}" class="habit-archive-btn icon-btn" type="button" title="Archive">
         📭
       </button>
-      <button
-        class="btn btn-outline-secondary details-btn"
-        data-habit-id="{{ habit.id }}"
-        title="Details"
-      >
+      <button class="btn btn-outline-secondary details-btn" data-habit-id="{{ habit.id }}" title="Details">
         🔍
       </button>
-      <button
-        type="button"
-        onclick="ToggleNoteRow({{ habit.id }})"
-        title="Note"
-      >
+      <button type="button" onclick="ToggleNoteRow({{ habit.id }})" title="Note">
         📝
       </button>
-      <button
-        type="button"
-        class="edit-btn"
-        data-id="{{ habit.id }}"
-        data-name="{{ habit.name }}"
-        data-interval="{{ habit.interval or 1 }}"
-        data-emoji="{{ habit.emoji or '🔥' }}"
-        data-color="{{ habit.color or '#ffffff' }}"
-        data-category-id="{{ habit.category_id or '' }}"
-        title="Edit"
-      >
+      <button type="button" class="edit-btn" data-id="{{ habit.id }}" data-name="{{ habit.name }}"
+        data-interval="{{ habit.interval or 1 }}" data-emoji="{{ habit.emoji or '🔥' }}"
+        data-color="{{ habit.color or '#ffffff' }}" data-category-id="{{ habit.category_id or '' }}" title="Edit">
         ✏️
       </button>
-      <form
-        method="post"
-        data-confirm-message="Are you sure you want to delete '{{ habit.name }}'?"
-        action="{{ url_for('delete_habit_route', habit_id=habit.id) }}"
-        class="confirmation-required inline"
-      >
+      <form method="post" data-confirm-message="Are you sure you want to delete '{{ habit.name }}'?"
+        action="{{ url_for('delete_habit_route', habit_id=habit.id) }}" class="confirmation-required inline">
         <button type="submit" class="danger" title="Delete">🗑️</button>
       </form>
     </div>
@@ -156,55 +102,31 @@
   <!--check in note-->
   <div class="check-in-note-row hidden" id="check-in-note-row-{{ habit.id }}">
     <strong>Last Check Note:</strong>
-    <form
-      class="check-in-note-form"
-      id="check-in-note-form-{{ habit.id }}"
-      action="{{ url_for('check_in_route', habit_id=habit.id) }}"
-      method="post"
-    >
+    <form class="check-in-note-form" id="check-in-note-form-{{ habit.id }}"
+      action="{{ url_for('check_in_route', habit_id=habit.id) }}" method="post">
       {% set last_checkin = habit.check_ins | selectattr('is_done', 'equalto',
       1) | list | last %}
-      <input
-        type="text"
-        name="note"
-        placeholder="your checkIn note:"
-        value="{{ last_checkin.note if last_checkin and last_checkin.note else '' }}"
-      />
+      <input type="text" name="note" placeholder="your checkIn note:"
+        value="{{ last_checkin.note if last_checkin and last_checkin.note else '' }}" />
       <button value="submit" class="btn btn-success btn-sm">Save Note</button>
-      <button
-        type="button"
-        class="btn btn-success btn-sm"
-        onclick="ToggleCheckInNoteRow({{ habit.id }})"
-      >
+      <button type="button" class="btn btn-success btn-sm" onclick="ToggleCheckInNoteRow({{ habit.id }})">
         Cancel
       </button>
     </form>
   </div>
   <!-- Note Row -->
-  <div
-    class="habit-note-row"
-    id="note-row-{{ habit.id }}"
+  <div class="habit-note-row" id="note-row-{{ habit.id }}"
     data-description="{{ 'true' if habit.description else 'false' }}"
-    style="{% if not habit.description %}display: none;{% endif %}"
-  >
+    style="{% if not habit.description %}display: none;{% endif %}">
     {% if habit.description %}
     <div class="note-display">
       <strong>Note:</strong> {{ habit.description }}
     </div>
     {% endif %}
-    <form
-      id="note-form-{{ habit.id }}"
-      method="post"
-      action="{{ url_for('add_note_route', habit_id=habit.id) }}"
-      class="note-form"
-      style="display: none"
-    >
-      <input
-        type="text"
-        name="description"
-        placeholder="Write a note for this habit..."
-        value="{{ habit.description or '' }}"
-      />
+    <form id="note-form-{{ habit.id }}" method="post" action="{{ url_for('add_note_route', habit_id=habit.id) }}"
+      class="note-form" style="display: none">
+      <input type="text" name="description" placeholder="Write a note for this habit..."
+        value="{{ habit.description or '' }}" />
       <button type="submit" class="btn btn-success btn-sm">Save Note</button>
     </form>
   </div>
@@ -215,17 +137,11 @@
     <span class="history-label">Streak:</span>
     <div class="history-items">
       {% for check_in in habit.check_ins %} {% if check_in.is_done == 1 %}
-      <span
-        class="history-emoji"
-        title="{{ check_in.check_in_date.strftime('%d %b') }}"
-      >
+      <span class="history-emoji" title="{{ check_in.check_in_date.strftime('%d %b') }}">
         {{ habit.emoji }}
       </span>
       {% else %}
-      <span
-        class="history-emoji missed"
-        title="Missed on {{ check_in.check_in_date.strftime('%d %b') }}"
-      >
+      <span class="history-emoji missed" title="Missed on {{ check_in.check_in_date.strftime('%d %b') }}">
         {{ habit.emoji }}
       </span>
       {% endif %} {% endfor %}

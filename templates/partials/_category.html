@@ -1,0 +1,55 @@
+<section class="">
+  <h2>Add Category</h2>
+  <form method="post" action="{{ url_for('add_category_route') }}">
+    <label for="category_name">Title: </label>
+    <input type="text" name="Category-title" style="width: 35%" placeholder="Name" required />
+
+    <button type="submit">Add</button>
+  </form>
+
+  <!-- List of existing categories -->
+  <div style="margin-top: 20px; list-style-type: none; padding-left: 0;">
+    <h3>Existing Categories:</h3>
+    {% if categories %}
+    <ul>
+      {% for category in categories %}
+      <li class="category-item-list">
+        <div class="category-item">
+          {{ category.id }}.
+          {{ category.title }}
+          <div class="category-actions">
+            <!--edit-->
+            <button type="button" class="btn btn-success" onclick="ToggleCatRow({{ category.id }})">
+              Edit
+            </button>
+            <!-- Delete -->
+            <form action="{{ url_for('delete_category_route', category_id=category.id) }}" method="post"
+              class="confirmation-required"
+              data-confirm-message="are you sure you want to delete {{ category.title }}?">
+              <button class="delete-cat-btn btn alert danger">🗑️</button>
+            </form>
+          </div>
+        </div>
+
+        <!--Category edit form-->
+        <div class="cat-edit-row hidden" id="cat-edit-row-{{ category.id }}">
+
+          <form class="cat-edit-form" id="cat-edit-form"
+            action="{{ url_for('edit_category_route', category_id=category.id) }}" method="post">
+
+            <input type="text" name="category-title" placeholder="edit category" value="{{ category.title }}" />
+            <button type="submit" class="btn btn-success btn-sm">Save</button>
+            <button type="button" class="btn btn-success btn-sm" onclick="ToggleCatRow({{ category.id }})">
+              Cancel
+            </button>
+          </form>
+        </div>
+      </li>
+
+      {% endfor %}
+    </ul>
+    {% else %}
+    <p>No categories yet. Add one above!</p>
+    {% endif %}
+  </div>
+</section>

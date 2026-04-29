@@ -156,6 +156,10 @@ function ToggleCheckInNoteRow(habitId) {
   const noteRow = document.getElementById(`check-in-note-row-${habitId}`);
   noteRow.classList.toggle("hidden");
 }
+function ToggleCatRow(catId) {
+  const noteRow = document.getElementById(`cat-edit-row-${catId}`);
+  noteRow.classList.toggle("hidden");
+}
 function fadingEffect(element) {
   element.style.opacity = "1";
 
@@ -174,6 +178,7 @@ document.addEventListener("DOMContentLoaded", function () {
   confirmationDialogs();
   updateLeftSidebar();
   HabitDetailsButton();
+
   // toggle-main button
 
   // document.querySelectorAll(".toggle-main-btn").forEach((btn) => {

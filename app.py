@@ -95,6 +95,18 @@ def fill_missed_days(habit):
     habit.last_sync_date = today
     db.session.commit()
 
+@app.post("/update")
+def update_habits():
+    habits = Habit.query.filter(Habit.category_id.is_(None)).all()
+    
+    for habit in habits:
+        habit.category_id = 1
+    
+    db.session.commit()
+    flash(f"Fixed {len(habits)} habits", "ok")
+    return redirect(url_for("index"))
+
+
 @app.get("/")
 def index():
     if "user_id" not in session:
@@ -236,6 +248,9 @@ def edit_user_route(user_id):
 def logout():
     session.clear()
     return redirect(url_for("login"))
+
+
+
 
 @app.post("/habits/new")
 def add_habit_route():
@@ -470,10 +485,16 @@ def add_note_route(habit_id):
         db.session.rollback()
         flash(f"Error: {str(e)}","err")
         return redirect(url_for("index"))
+
+
+
 @app.post("/categories/new")
 def add_category_route():
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+
     title = request.form.get("Category-title")
-    duplicate_title = Category.query.filter_by(title=title).first
+    duplicate_title = Category.query.filter_by(title=title).first()
     if not title or title == "" or duplicate_title:
         flash("invalid input or duplicate Category","err")
         return redirect (url_for("index"))
@@ -490,6 +511,51 @@ def add_category_route():
         flash(f"failed. exception:{str(e)}", "err")    
         return redirect(url_for("index"))
     
+@app.post("/categories/<int:category_id>/edit")
+def edit_category_route(category_id):
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+
+    cat: Category=Category.query.get_or_404(category_id)
+
+    new_title = request.form.get("category-title","").strip()
+    if not new_title:
+        flash("Category title cannot be empty.", "err")
+        return redirect(url_for("index"))
+    
+    try:
+        cat.title=new_title
+        db.session.commit()
+        flash(f"Category updated to: {new_title}.", "ok")
+        return redirect(url_for("index"))
+    except Exception as e:
+        flash(f"Sorry, an error occured.", "err")
+        return redirect(url_for("index"))
+    
+    
+@app.post("/categories/<int:category_id>/delete")
+def delete_category_route(category_id):
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+
+    if category_id==1:
+        flash("Cannot delete the default category", "err")
+        return redirect(url_for("index"))
+    
+    cat:Category = Category.query.get_or_404(category_id)
+    try:
+        habits = Habit.query.filter_by(category_id=category_id).all()
+        for habit in habits:
+            habit.category_id = 1 #the first category, called "Not Assigned"
+        db.session.delete(cat)
+        db.session.commit() 
+        flash(f"Category: {cat.title} deleted.","ok")
+        return redirect(url_for("index"))
+    except Exception as e:
+        flash("Sorry, there was an error", "err")
+        return redirect(url_for("index"))
+
+
 if __name__ == "__main__":
     app.run(host='0.0.0.0',debug=True)
 

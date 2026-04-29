@@ -1792,7 +1792,23 @@ small {
   font-size: 14px;
   transition: all 0.2s;
 }
-
+.category-item {
+  padding: 5px 0;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 5px;
+}
+.category-item-list {
+  display: flex;
+  flex-direction: column;
+}
+.category-actions {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
 .edit-profile-btn:hover {
   background: rgba(21, 166, 180, 0.862);
   border-color: rgba(255, 255, 255, 0.3);
