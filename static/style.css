@@ -1784,7 +1784,7 @@ small {
 .edit-profile-btn {
   flex: 1;
   padding: 12px 20px;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(27, 222, 239, 0.63);
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 50px;
   color: white;
@@ -1794,7 +1794,7 @@ small {
 }
 
 .edit-profile-btn:hover {
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(21, 166, 180, 0.862);
   border-color: rgba(255, 255, 255, 0.3);
 }
 

@@ -201,6 +201,37 @@ def login():
     flash(f"welcome, {user.username}", "ok")
     return redirect(url_for("index"))
 
+@app.post("/users/<int:user_id>/edit")
+def edit_user_route(user_id):
+    if "user_id" not in session or session["user_id"] != user_id:
+        flash("login or signup first please.", "err")
+        return redirect(url_for("login"))
+    
+    user:User = User.query.get_or_404(user_id)
+    try:
+
+        user.name = request.form.get('name', user.name)
+        user.username = request.form.get('username', user.username)
+        user.email = request.form.get('email', user.email)
+        user.phone_number = request.form.get('phone_number', user.phone_number)
+
+        birth_date = request.form.get('birth_date', user.birth_date)
+        if birth_date:
+            user.birth_date = datetime.strptime(birth_date, "%Y-%m-%d").date()
+
+        password = request.form.get("password")
+        if password and len(password)>=10:
+            user.set_password(password)
+
+        db.session.commit()
+        flash(f"your profile is updated successfully","ok")
+        return redirect(url_for("index"))
+    except Exception as e:
+        db.session.rollback()
+        print(str(e))
+        flash(f"there was an error: \n {str(e)}","err")
+        return redirect(url_for("index"))
+
 @app.post("/logout")
 def logout():
     session.clear()
@@ -461,3 +492,8 @@ def add_category_route():
     
 if __name__ == "__main__":
     app.run(host='0.0.0.0',debug=True)
+
+
+
+
+

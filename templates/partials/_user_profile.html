@@ -47,35 +47,21 @@
     </div>
     <div class="user-info-row">
       <span>📅</span>
-      <span
-        >{{ user.creation_date.strftime("%b %Y") if user.creation_date else ''
-        }}</span
-      >
+      <span>{{ user.creation_date.strftime("%b %Y") if user.creation_date else ''
+        }}</span>
     </div>
   </div>
 
   <div class="user-actions">
     <!--edit profile -->
-    <button
-      class="edit-profile-btn"
-      id="edit-profile-btn"
-      data-user-id="{{ user.id}}"
-      data-user-username="{{ user.username}}"
-      data-user-name="{{ user.name or ''}}"
-      data-user-phone="{{ user.phone_number}}"
-      data-user-email="{{ user.email or ''}}"
-      data-user-birthday="{{ user.birth_date or ''}}"
-    >
+    <button class="edit-profile-btn btn btn-primary" id="edit-profile-btn" data-id="{{ user.id}}"
+      data-username="{{ user.username}}" data-name="{{ user.name or ''}}" data-phone="{{ user.phone_number}}"
+      data-email="{{ user.email or ''}}" data-birthday="{{ user.birth_date or ''}}">
       edit profile
     </button>
     <!-- Logout -->
-    <form
-      method="post"
-      action="{{ url_for('logout') }}"
-      class="confirmation-required"
-      data-confirm-title="Where are you going?"
-      data-confirm-message="Are you sure you want to log out?"
-    >
+    <form method="post" action="{{ url_for('logout') }}" class="confirmation-required"
+      data-confirm-title="Where are you going?" data-confirm-message="Are you sure you want to log out?">
       <button type="submit" class="user-logout-btn">Logout</button>
     </form>
   </div>

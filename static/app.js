@@ -39,21 +39,51 @@ document.querySelectorAll(".edit-btn").forEach((button) => {
     const interval = button.getAttribute("data-interval");
     const emoji = button.getAttribute("data-emoji");
     const color = button.getAttribute("data-color");
-        const categoryId = button.getAttribute("data-category-id");
-
+    const categoryId = button.getAttribute("data-category-id");
 
     openModal(habitId, name, interval, emoji, color, categoryId);
   });
 });
-document.getElementById("edit-profile-btn").addEventListener("click", function(btn){
-  const userId = btn.getAttribute("user-id")
-  const userName = btn.getAttribute("user-name")
-  const userUsername = btn.getAttribute("user-username")
-  const userPhone = btn.getAttribute("user-phone")
-  const userEmail = btn.getAttribute("user-email")
-  const userBirthDay = btn.getAttribute("user-birthday")
-  openEditProfileModal(userId, userName, userUsername,userPhone,userEmail,userBirthDay)
-})
+document
+  .getElementById("edit-profile-btn")
+  .addEventListener("click", function () {
+    const userId = this.getAttribute("data-id");
+    const Name = this.getAttribute("data-name");
+    const Username = this.getAttribute("data-username");
+    const Phone = this.getAttribute("data-phone");
+    const Email = this.getAttribute("data-email");
+    const BirthDay = this.getAttribute("data-birthday");
+    openEditProfileModal(userId, Name, Username, Phone, Email, BirthDay);
+  });
+
+function openEditProfileModal(userId, Name, Username, Phone, Email, BirthDay) {
+  const modal = document.getElementById("editProfileModal");
+  const form = document.getElementById("editProfileForm");
+
+  document.getElementById("editProfileName").value = Name || "";
+  document.getElementById("editProfileUsername").value = Username || "";
+  document.getElementById("editProfilePhone").value = Phone || "";
+  document.getElementById("editProfileEmail").value = Email || "";
+  document.getElementById("editProfileBirthday").value = BirthDay || "";
+  document.getElementById("editProfilePassword").value = "";
+
+  form.action = `/users/${userId}/edit`;
+  modal.classList.add("active");
+}
+
+function closeProfileModal() {
+  const modal = document.getElementById("editProfileModal");
+  modal.classList.remove("active");
+}
+
+// Close modal when clicking outside the content
+window.addEventListener("click", (event) => {
+  const modal = document.getElementById("editProfileModal");
+  if (event.target === modal) {
+    closeProfileModal();
+  }
+});
+
 document.addEventListener("click", async (e) => {
   //toggle archive button
 
