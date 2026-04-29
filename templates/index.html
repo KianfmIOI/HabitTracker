@@ -1,6 +1,5 @@
 {% extends "base.html" %} {% block nav %} {% include "partials/_nav_box.html" %}
-{% endblock %} {% block content %}
-{% if message %}
+{% endblock %} {% block content %} {% if message %}
 <div class="msg ok alert alert-success" role="alert">{{message}}</div>
 {% endif %} {% if error %}
 <div class="msg err alert alert-danger" role="alert">{{ error }}</div>
@@ -22,7 +21,8 @@
     {% include "partials/_add_habit.html" %}
 
     <!--Habit table-->
-    {% include "partials/_habit_table.html" %}
+    {% include "partials/_habit_table.html" %} {% include
+    "partials/_add_category.html" %}
   </div>
   <!--User profile-->
   {% include "partials/_user_profile.html" %}

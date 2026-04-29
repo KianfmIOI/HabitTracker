@@ -1106,11 +1106,20 @@ small {
 }
 
 .checkin-calendar {
+  overflow-x: auto;
+  overflow-y: hidden;
   display: grid;
   grid-template-columns: repeat(13, 1fr);
   gap: 4px;
 }
+.checkin-calendar ::-webkit-scrollbar {
+  width: 4px;
+}
 
+.checkin-calendar ::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 4px;
+}
 .cal-cell {
   aspect-ratio: 1;
   border-radius: 3px;
@@ -1762,4 +1771,51 @@ small {
   .habits-header {
     display: none;
   }
+}
+.user-actions {
+  display: flex;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 4px;
+  border-radius: 50px;
+  margin-top: auto;
+}
+
+.edit-profile-btn {
+  flex: 1;
+  padding: 12px 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50px;
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.edit-profile-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.user-logout-btn {
+  flex: 1;
+  padding: 12px 20px;
+  background: rgba(239, 68, 68, 0.2);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 50px;
+  color: #ef4444;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.user-logout-btn:hover {
+  background: rgba(239, 68, 68, 0.3);
+  border-color: rgba(239, 68, 68, 0.5);
+}
+
+.user-actions form {
+  flex: 1;
+  margin: 0;
 }

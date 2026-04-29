@@ -39,11 +39,21 @@ document.querySelectorAll(".edit-btn").forEach((button) => {
     const interval = button.getAttribute("data-interval");
     const emoji = button.getAttribute("data-emoji");
     const color = button.getAttribute("data-color");
+        const categoryId = button.getAttribute("data-category-id");
 
-    openModal(habitId, name, interval, emoji, color);
+
+    openModal(habitId, name, interval, emoji, color, categoryId);
   });
 });
-
+document.getElementById("edit-profile-btn").addEventListener("click", function(btn){
+  const userId = btn.getAttribute("user-id")
+  const userName = btn.getAttribute("user-name")
+  const userUsername = btn.getAttribute("user-username")
+  const userPhone = btn.getAttribute("user-phone")
+  const userEmail = btn.getAttribute("user-email")
+  const userBirthDay = btn.getAttribute("user-birthday")
+  openEditProfileModal(userId, userName, userUsername,userPhone,userEmail,userBirthDay)
+})
 document.addEventListener("click", async (e) => {
   //toggle archive button
 
@@ -68,7 +78,7 @@ document.addEventListener("click", async (e) => {
 });
 
 // Open edit modal
-function openModal(habitId, name, interval, emoji, color) {
+function openModal(habitId, name, interval, emoji, color, categoryId) {
   const modal = document.getElementById("editModal");
   const form = document.getElementById("editForm");
 
@@ -76,6 +86,7 @@ function openModal(habitId, name, interval, emoji, color) {
   document.getElementById("editInterval").value = interval || 1;
   document.getElementById("editEmoji").value = emoji || "🔥";
   document.getElementById("editColor").value = color || "#ffffff";
+  document.getElementById("editCategory").value = categoryId || "";
 
   form.action = `/habits/${habitId}/edit`;
   modal.classList.add("active");

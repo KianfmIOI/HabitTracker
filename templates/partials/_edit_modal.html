@@ -33,6 +33,13 @@
       <label class="form-label">Color:</label>
       <input class="form-control" type="color" name="color" id="editColor" />
 
+      <label class="form-label">Category:</label>
+      <select class="form-control" name="category_id" id="editCategory">
+        <option value="">select a category</option>
+        {% for category in categories %}
+        <option value="{{ category.id }}">{{ category.title }}</option>
+        {% endfor %}
+      </select>
       <button type="submit">Save Changes</button>
       <button type="button" onclick="closeModal()">Cancel</button>
     </form>

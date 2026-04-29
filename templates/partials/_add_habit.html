@@ -44,6 +44,16 @@
     />
     days
     <br />
+    <label for="category_id">Category:</label>
+    <br />
+    <select id="category_id" name="category_id" class="form-control">
+      <option value="">Not Assigned</option>
+      {% for category in categories %} {% if category.title != "Not Assigned" %}
+      <option value="{{ category.id }}">{{ category.title }}</option>
+      {% endif %} {% endfor %}
+    </select>
+    <br />
+
     <button type="submit">Add</button>
   </form>
 </section>

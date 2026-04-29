@@ -13,8 +13,8 @@
   </div>
 
   <div class="habits-container" id="habit-list">
-
-    {% include "partials/_habit_list.html" %}
+    {% for habit in habits %} {% include "partials/_habit_item.html" %} {%
+    endfor %}
   </div>
 
   {% else %}

@@ -1,8 +1,10 @@
 ﻿from flask import Flask, redirect, render_template, request,make_response, session, url_for,jsonify, abort,flash
 from flask_sqlalchemy import SQLAlchemy 
-from models import db, User, Habit, CheckIn
+from models import db, User, Habit, Category, CheckIn
 from datetime import datetime, date, timedelta
+from flask_migrate import Migrate
 import secrets
+
 app = Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
@@ -10,6 +12,8 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = 'Asadi1385'
 
 db.init_app(app)
+Migrate = Migrate(app,db)
+
 with app.app_context():
     db.create_all()
 
@@ -103,10 +107,11 @@ def index():
    
     user_habits = []
     archived_habits = []
-    if user:
-        user_habits = Habit.query.filter_by(user_id = user.id, is_archived = False).order_by(Habit.is_main.desc(),Habit.last_check_in_date.desc(),Habit.creation_date.desc()).all()
-        archived_habits = Habit.query.filter_by(user_id = user.id, is_archived = True).order_by(Habit.creation_date.desc()).all()
     
+    user_habits = Habit.query.filter_by(user_id = user.id, is_archived = False).order_by(Habit.is_main.desc(),Habit.last_check_in_date.desc(),Habit.creation_date.desc()).all()
+    archived_habits = Habit.query.filter_by(user_id = user.id, is_archived = True).order_by(Habit.creation_date.desc()).all()
+    categories = Category.query.all()
+
     for habit in user_habits:
         fill_missed_days(habit)
 
@@ -121,6 +126,7 @@ def index():
         current_year=current_year,
         today = date.today(),
         timedelta = timedelta,
+        categories = categories,
         message = message,
         error = error
     )
@@ -220,9 +226,17 @@ def add_habit_route():
     habit_interval = int(request.form.get("habit_interval") or 1)
     habit_emoji = request.form.get("habit_emoji").strip() or "🔥"
     habit_color = request.form.get("habit_color", "#85B2FA")
+    
+    category_id = request.form.get("category_id")
+    if category_id:
+        category_id = int(category_id)
+    else:
+        default_category: Category = Category.query.filter_by(title = "Not Assigned").first()
+        category_id = default_category.id if default_category else None
 
     new_habit = Habit(
         user_id = user.id,
+        category_id = category_id,
         name = habit_name,
         emoji = habit_emoji,
         interval = habit_interval,
@@ -333,6 +347,13 @@ def edit_habit_route(habit_id):
     habit.interval = int(request.form.get("interval", 1))
     habit.color = request.form.get("color", "#85B2FA")
 
+    category_id = request.form.get("category_id")
+    if category_id:
+        habit.category_id = int(category_id)
+    else:
+        default_cat = Category.query.filter_by(title="Not Assigned").first()
+        habit.category_id = default_cat.id if default_cat else None
+
     try:
         db.session.commit()
         flash(f"'{habit.name}' changed successfully","ok")
@@ -418,6 +439,25 @@ def add_note_route(habit_id):
         db.session.rollback()
         flash(f"Error: {str(e)}","err")
         return redirect(url_for("index"))
-
+@app.post("/categories/new")
+def add_category_route():
+    title = request.form.get("Category-title")
+    duplicate_title = Category.query.filter_by(title=title).first
+    if not title or title == "" or duplicate_title:
+        flash("invalid input or duplicate Category","err")
+        return redirect (url_for("index"))
+    new_cat = Category(
+        title = title
+    )
+    try:
+        db.session.add(new_cat)
+        db.session.commit()
+        flash(f"New Category: {title}", "ok")
+        return redirect(url_for("index"))
+    except Exception as e:
+        db.session.rollback()
+        flash(f"failed. exception:{str(e)}", "err")    
+        return redirect(url_for("index"))
+    
 if __name__ == "__main__":
     app.run(host='0.0.0.0',debug=True)

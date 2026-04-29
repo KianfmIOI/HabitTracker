@@ -27,12 +27,21 @@ class User(db.Model):
         
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
+
+class Category(db.Model):
+    __tablename__ = 'categories'
+    id = db.Column(db.Integer, primary_key = True)
+    title = db.Column(db.String, nullable = False, unique = True)
+    created_at = db.Column(db.DateTime, default = datetime.utcnow)
+
+    habits = db.relationship('Habit',back_populates='category',lazy=True)
     
 class Habit(db.Model):
     __tablename__ = 'habits'
 
     id = db.Column(db.Integer, primary_key = True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable = False, index=True )
+    category_id = db.Column(db.Integer, db.ForeignKey('categories.id'), nullable = True, index=True )
     name = db.Column(db.String(100), nullable = False)
     creation_date = db.Column(db.Date, default = date.today)
     last_check_in_date = db.Column(db.Date, nullable = True)
@@ -49,6 +58,7 @@ class Habit(db.Model):
     color = db.Column(db.String(7), default="#85B2FA")
     
     user = db.relationship('User', back_populates='habits')
+    category = db.relationship('Category',back_populates='habits')
     check_ins = db.relationship('CheckIn', back_populates = 'habit', lazy = True, cascade ="all, delete-orphan")
 
 class CheckIn(db.Model):

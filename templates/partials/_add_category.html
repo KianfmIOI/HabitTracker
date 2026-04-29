@@ -1,0 +1,17 @@
+<section class="">
+  <h2>Add Category</h2>
+  <form method="post" action="{{ url_for('add_category_route') }}">
+    <label for="habit_name">Title: </label>
+    <br />
+    <input
+      type="text"
+      name="Category-title"
+      style="width: 35%"
+      placeholder="Name"
+      required
+    />
+    <br />
+
+    <button type="submit">Add</button>
+  </form>
+</section>

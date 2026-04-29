@@ -11,7 +11,7 @@
         hx-post="{{url_for('toggle_main_route', habit_id=habit.id)}}"
         hx-target="#habit-list"
         hx-swap="innerHTML transition:true"
-        class="toggle-main-btn"
+        class="toggle-main-btn hidden"
         type="button"
         aria-label="Toggle main habit"
       >
@@ -39,6 +39,10 @@
           >
             {{ habit.name }}
           </span>
+          <span
+            >Category: {% if habit.category %}{{ habit.category.title }}{% else
+            %}Not Assigned{% endif %}
+          </span>
           {% if habit.interval and habit.interval > 1 %}
           <span class="habit-interval">Every {{habit.interval}} days</span>
           {% endif %} {% set score = habit|habit_completion %} {% if score %}
@@ -47,7 +51,13 @@
         </div>
       </div>
     </div>
-
+    <div class="habit-cell habit-category">
+      <span class="cell-label">Category:</span>
+      <span class="cell-value">
+        {% if habit.category %} {{ habit.category.title }} {% else %} Not
+        Assigned {% endif %}
+      </span>
+    </div>
     <!-- Last Check-in -->
     <div class="habit-cell habit-last">
       <span class="cell-label">Last:</span>
@@ -127,6 +137,7 @@
         data-interval="{{ habit.interval or 1 }}"
         data-emoji="{{ habit.emoji or '🔥' }}"
         data-color="{{ habit.color or '#ffffff' }}"
+        data-category-id="{{ habit.category_id or '' }}"
         title="Edit"
       >
         ✏️
