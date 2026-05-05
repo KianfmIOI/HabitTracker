@@ -466,7 +466,7 @@ def toggle_archive_route(habit_id):
 
 @app.post("/habits/<int:habit_id>/note")
 def add_note_route(habit_id):
-    habit = Habit.query.get_or_404(habit_id)
+    habit:Habit = Habit.query.get_or_404(habit_id)
     today = date.today()
 
     description = request.form.get("description", "").strip()
@@ -475,17 +475,37 @@ def add_note_route(habit_id):
     try:
         db.session.commit()
         if habit.description:
-            flash(f"Note for {habit.name}: {description}.","ok")
-            return redirect(url_for("index"))
+            # flash(f"Note for {habit.name}: {description}.","ok")
+            # return redirect(url_for("index"))
+            return jsonify({
+                "status":"ok",
+                "message":f"Note for {habit.name}: {description}.",
+                "data":{
+                    "habit":{habit.name},
+                    "description":{habit.description}
+                }
+            })
         else:
-            flash(f"No note for {habit.name}.","ok")
-            return redirect(url_for("index"))
+            # flash(f"No note for {habit.name}.","ok")
+            # return redirect(url_for("index"))
+            return jsonify({
+                    "status":"ok",
+                    "message":f"No note for {habit.name}.",
+                    "data":{
+                        "habit":{habit.name},
+                        "description":{habit.description}
+                    }
+                })
 
     except Exception as e:
         db.session.rollback()
-        flash(f"Error: {str(e)}","err")
-        return redirect(url_for("index"))
-
+        # flash(f"Error: {str(e)}","err")
+        # return redirect(url_for("index"))
+        return jsonify({
+            "status":"err",
+            "message":"An Error occured",
+            "data":None
+        }),500
 
 
 @app.post("/categories/new")

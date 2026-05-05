@@ -179,30 +179,6 @@ document.addEventListener("DOMContentLoaded", function () {
   updateLeftSidebar();
   HabitDetailsButton();
 
-  // toggle-main button
-
-  // document.querySelectorAll(".toggle-main-btn").forEach((btn) => {
-  //   btn.addEventListener("click", async () => {
-  //     const habitId = btn.dataset.habitId;
-
-  //     try {
-  //       const res = await fetch(`/habits/${habitId}/toggle-main`, {
-  //         method: "POST",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //       });
-  //       if (res.ok) {
-  //         const data = await res.json();
-  //         btn.textContent = data.is_main ? "★" : "☆";
-  //         showFlash(data.message, "ok");
-  //       }
-  //     } catch (err) {
-  //       console.error("Error toggling habit as main", err);
-  //       showFlash("An error occurred", "err");
-  //     }
-  //   });
-  // });
 });
 function showFlash(msg, category) {
   const msgBox = document.createElement("div");
